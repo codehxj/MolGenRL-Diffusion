@@ -95,39 +95,39 @@ fi
 echo "✅ Done. Outputs & logs saved to: ${OUTDIR}"
 
 
-## 📂 Train the diffusion model:
+# 📂 Train the diffusion model:
  #python train_diffusion.py --data ./data/ChEMBL.smi
 
 
-##💡 Sampling
+#💡 Sampling
 
 Generate molecules using trained models:
 
 python sample.py --model diffusion --num_samples 1000 --out ./results/generated.smi
 
-## ⚙️ Optimization
+# ⚙️ Optimization
 
 Optimize the generative model for specific tasks:
 
-# Optimize for binding affinity
+## Optimize for binding affinity
 python optimize_affinity.py --model diffusion --target 2RMA  
 
-# Optimize for molecular similarity
+## Optimize for molecular similarity
 python optimize_similarity.py --model diffusion --ref_mol ./data/reference.smi
 
-🔧 External Dataset Application
+#🔧 External Dataset Application
 
 To apply the framework on a new dataset, prepare a .smi file with molecular structures and specify it via the --data argument.
 
 Example:
 
-# Train on a new dataset
+## Train on a new dataset
 python train_diffusion.py --data ./data/my_dataset.smi  
 
-# Sample molecules from the new model
+## Sample molecules from the new model
 python sample.py --model diffusion --num_samples 500 --out ./results/my_generated.smi
 
-📌 Example Pipelines (Common Use Cases)
+#📌 Example Pipelines (Common Use Cases)
 
 End-to-end training and sampling
 
