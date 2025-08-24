@@ -1,19 +1,26 @@
 # Molecular Generative Model
 
+This repository provides implementations of **molecular generative models** using **VAE** and **Diffusion Models**, with built-in pipelines for **training, sampling, and optimization**.  
+It also includes scripts for **external dataset application** and **end-to-end pipelines**.
+
+---
+
 ## 📂 Paper Data
 
 The datasets used in this project can be found at the following links:
 
-- **Training datasets for molecular generative models:**
-  - [**ChEMBL**](https://chembl.gitbook.io/chembl-interface-documentation/downloads)
-  - [**QM9**](https://drive.google.com/file/d/1JZ_Z5bjS0RsX_BRWtrplMN9vZpL78-T7/view?usp=drive_link)
-  - [**GEOM-Drug**](https://dataverse.harvard.edu/file.xhtml?fileId=4360331&version=2.0)
-  - [**ZINC**](https://drive.google.com/file/d/1N44fpvCKEqI3xorXH7Q9sOq2f4ylCUwz/view)
+- [**ChEMBL**](https://chembl.gitbook.io/chembl-interface-documentation/downloads)  
+- [**QM9**](https://drive.google.com/file/d/1JZ_Z5bjS0RsX_BRWtrplMN9vZpL78-T7/view?usp=drive_link)  
+- [**GEOM-Drug**](https://dataverse.harvard.edu/file.xhtml?fileId=4360331&version=2.0)  
+- [**ZINC**](https://drive.google.com/file/d/1N44fpvCKEqI3xorXH7Q9sOq2f4ylCUwz/view)  
 
 ---
 
 ## ⚡ One-File Quickstart Pipeline
 
+We provide a **single executable script** (`run_pipeline.sh`) to run the full process (**training → sampling → optimization**).  
+
+**Save as `run_pipeline.sh`:**
 
 ```bash
 #!/usr/bin/env bash
@@ -93,60 +100,102 @@ else
 fi
 
 echo "✅ Done. Outputs & logs saved to: ${OUTDIR}"
+```
 
+**Run example:**
 
-# 📂 Train the diffusion model:
- #python train_diffusion.py --data ./data/ChEMBL.smi
+```bash
+chmod +x run_pipeline.sh
+./run_pipeline.sh \
+  --data ./data/ChEMBL.smi \
+  --target 2RMA \
+  --ref_mol ./data/reference.smi \
+  --num_samples 1000 \
+  --run_name demo_run
+```
 
+---
 
-#💡 Sampling
+## 🏋️ Training
+
+### Train the VAE
+```bash
+python train_vae.py --data ./data/ChEMBL.smi
+```
+
+### Train the Diffusion model
+```bash
+python train_diffusion.py --data ./data/ChEMBL.smi
+```
+
+---
+
+## 💡 Sampling
 
 Generate molecules using trained models:
 
+```bash
 python sample.py --model diffusion --num_samples 1000 --out ./results/generated.smi
+```
 
-# ⚙️ Optimization
+---
 
-Optimize the generative model for specific tasks:
+## ⚙️ Optimization
 
-## Optimize for binding affinity
-python optimize_affinity.py --model diffusion --target 2RMA  
+### Optimize for binding affinity
+```bash
+python optimize_affinity.py --model diffusion --target 2RMA
+```
 
-## Optimize for molecular similarity
+### Optimize for molecular similarity
+```bash
 python optimize_similarity.py --model diffusion --ref_mol ./data/reference.smi
+```
 
-#🔧 External Dataset Application
+---
 
-To apply the framework on a new dataset, prepare a .smi file with molecular structures and specify it via the --data argument.
+## 🔧 External Dataset Application
 
-Example:
+To apply the framework on a new dataset, prepare a `.smi` file and specify it via the `--data` argument.
 
-## Train on a new dataset
-python train_diffusion.py --data ./data/my_dataset.smi  
+### Train on a new dataset
+```bash
+python train_diffusion.py --data ./data/my_dataset.smi
+```
 
-## Sample molecules from the new model
+### Sample molecules from the new model
+```bash
 python sample.py --model diffusion --num_samples 500 --out ./results/my_generated.smi
+```
 
-#📌 Example Pipelines (Common Use Cases)
+---
 
-End-to-end training and sampling
+## 📌 Example Pipelines (Common Use Cases)
 
+### End-to-end training and sampling
+```bash
 python train_vae.py --data ./data/ChEMBL.smi
 python train_diffusion.py --data ./data/ChEMBL.smi
 python sample.py --model diffusion --num_samples 1000 --out ./results/generated.smi
+```
 
-
-Affinity optimization on an external dataset
-
+### Affinity optimization on an external dataset
+```bash
 python train_diffusion.py --data ./data/my_dataset.smi
 python optimize_affinity.py --model diffusion --target 3AF2
+```
 
-
-Similarity-driven molecular generation
-
+### Similarity-driven molecular generation
+```bash
 python sample.py --model diffusion --num_samples 200 --out ./results/candidates.smi
 python optimize_similarity.py --model diffusion --ref_mol ./data/reference.smi
+```
 
-📖 Citation
+---
+
+## 📖 Citation
 
 If you find this code useful, please cite our paper.
+```
+[XXX]
+```
